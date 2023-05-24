@@ -122,11 +122,46 @@ void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
    }
 }
 
+//RETIRAR ANIMACAO DE VOXELS EM FORMA DE ESFERA
 void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius){
    for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
             for(int k=0; k<nz; k++){
                 if((pow((i-xcenter), 2) + pow((j-ycenter), 2) + pow((k-zcenter), 2)) < pow(radius, 2)){
+                    cutVoxel(i, j, k);
+                }
+            }
+        }
+   }
+}
+
+//ANIMANDO OS VOXELS EM FORMA DE ELIPSOIDE
+void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
+    float xEllipsoid, yEllipsoid, zEllipsoid;
+    for(int i=0; i<nx; i++){
+        for(int j=0; j<ny; j++){
+            for(int k=0; k<nz; k++){
+                xEllipsoid = pow(i-xcenter, 2)/pow(rx, 2);
+                yEllipsoid = pow(j-ycenter, 2)/pow(ry, 2);
+                zEllipsoid = pow(k-zcenter, 2)/pow(rz, 2);
+                if((xEllipsoid + yEllipsoid + zEllipsoid) < 1){
+                    putVoxel(i, j, k);
+                }
+            }
+        }
+   }
+}
+
+//RETIRAR ANIMACAO DE VOXELS EM FORMA DE ELLIPSOID
+void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
+   float xEllipsoid, yEllipsoid, zEllipsoid;
+   for(int i=0; i<nx; i++){
+        for(int j=0; j<ny; j++){
+            for(int k=0; k<nz; k++){
+                xEllipsoid = pow(i-xcenter, 2)/pow(rx, 2);
+                yEllipsoid = pow(j-ycenter, 2)/pow(ry, 2);
+                zEllipsoid = pow(k-zcenter, 2)/pow(rz, 2);
+                if((xEllipsoid + yEllipsoid + zEllipsoid) < 1){
                     cutVoxel(i, j, k);
                 }
             }
