@@ -12,15 +12,15 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz){
     r = g = b = a = 0; //DEFININDO CORES/TRANSPARENCIA
 
     //ALOCAÇÃO DA MATRIZ 3D
-    vetor = new Voxel**[nx];
+    v = new Voxel**[nx];
 
     for(int i=0; i<nx; i++){
-        vetor[i] = new Voxel*[ny];
+        v[i] = new Voxel*[ny];
     }
 
     for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
-            vetor[i][j] = new Voxel[nz];
+            v[i][j] = new Voxel[nz];
         }
     }
 
@@ -28,11 +28,11 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz){
     for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
             for(int k=0; k<nz; k++){
-                vetor[i][j][k].show = false;
-                vetor[i][j][k].r = r;
-                vetor[i][j][k].g = g;
-                vetor[i][j][k].b = b;
-                vetor[i][j][k].a = a;
+                v[i][j][k].show = false;
+                v[i][j][k].r = r;
+                v[i][j][k].g = g;
+                v[i][j][k].b = b;
+                v[i][j][k].a = a;
 
             }
         }
@@ -45,17 +45,17 @@ Sculptor::~Sculptor(){
     //ETAPA 3
     for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
-            delete[] vetor[i][j];
+            delete[] v[i][j];
         }
     }
 
     //ETAPA 2
     for(int i=0; i<nx; i++){
-        delete[] vetor[i];
+        delete[] v[i];
     }
 
     //ETAPA 1
-    delete[] vetor;
+    delete[] v;
     nx = ny = nz = 0;
 }
 
@@ -71,16 +71,16 @@ void Sculptor::setColor(float _r, float _g, float _b, float _a){
 
 //ANIMANDO VOXEL POR POSIÇÃO
 void Sculptor::putVoxel(int x, int y, int z){
-   vetor[x][y][z].show = true;
-   vetor[x][y][z].r = r;
-   vetor[x][y][z].g = g;
-   vetor[x][y][z].b = b;
-   vetor[x][y][z].a = a;
+   v[x][y][z].show = true;
+   v[x][y][z].r = r;
+   v[x][y][z].g = g;
+   v[x][y][z].b = b;
+   v[x][y][z].a = a;
 }
 
 //RETIRAR ANIMACAO DE VOXEL POR POSIÇÃO
 void Sculptor::cutVoxel(int x, int y, int z){
-   vetor[x][y][z].show = false;
+   v[x][y][z].show = false;
 }
 
 //ANIMANDO OS VOXELS EM FORMA DE CUBO
@@ -88,11 +88,11 @@ void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1){
    for(int i=x0; i<x1; i++){
         for(int j=y0; j<y1; j++){
             for(int k=z0; k<z1; k++){
-                vetor[i][j][k].show = true;
-                vetor[i][j][k].r = r;
-                vetor[i][j][k].g = g;
-                vetor[i][j][k].b = b;
-                vetor[i][j][k].a = a;
+                v[i][j][k].show = true;
+                v[i][j][k].r = r;
+                v[i][j][k].g = g;
+                v[i][j][k].b = b;
+                v[i][j][k].a = a;
             }
         }
    }
@@ -103,7 +103,7 @@ void Sculptor::cutBox(int x0, int x1, int y0, int y1, int z0, int z1){
    for(int i=x0; i<x1; i++){
         for(int j=y0; j<y1; j++){
             for(int k=z0; k<z1; k++){
-                vetor[i][j][k].show = false;
+                v[i][j][k].show = false;
             }
         }
    }
@@ -190,7 +190,7 @@ void Sculptor::writeOFF(const char* filename){
    for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
             for(int k=0; k<nz; k++){
-                if(vetor[i][j][k].show){
+                if(v[i][j][k].show){
                     nFaces = nFaces + 6;
                     nVertices = nVertices + 8;
                 }
@@ -203,7 +203,7 @@ void Sculptor::writeOFF(const char* filename){
    for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
             for(int k=0; k<nz; k++){
-                if(vetor[i][j][k].show){
+                if(v[i][j][k].show){
                     arquivo << (i-0.5) << " " << (j+0.5) << " " << (k-0.5) << std::endl;
                     arquivo << (i-0.5) << " " << (j-0.5) << " " << (k-0.5) << std::endl;
                     arquivo << (i+0.5) << " " << (j-0.5) << " " << (k-0.5) << std::endl;
@@ -220,13 +220,13 @@ void Sculptor::writeOFF(const char* filename){
    for(int i=0; i<nx; i++){
         for(int j=0; j<ny; j++){
             for(int k=0; k<nz; k++){
-                if(vetor[i][j][k].show){
-                    arquivo<<4<<" "<<(0+contador)<<" "<<(3+contador)<<" "<<(2+contador)<<" "<<(1 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
-                    arquivo<<4<<" "<<(4+contador)<<" "<<(5+contador)<<" "<<(6+contador)<<" "<<(7 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
-                    arquivo<<4<<" "<<(0+contador)<<" "<<(1+contador)<<" "<<(5+contador)<<" "<<(4 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
-                    arquivo<<4<<" "<<(0+contador)<<" "<<(4+contador)<<" "<<(7+contador)<<" "<<(3 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
-                    arquivo<<4<<" "<<(3+contador)<<" "<<(7+contador)<<" "<<(6+contador)<<" "<<(2 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
-                    arquivo<<4<<" "<<(1+contador)<<" "<<(2+contador)<<" "<<(6+contador)<<" "<<(5 + contador)<<" "<<vetor[i][j][k].r<<" "<<vetor[i][j][k].g<<" "<<vetor[i][j][k].b<<" "<<vetor[i][j][k].a<<std::endl;
+                if(v[i][j][k].show){
+                    arquivo<<4<<" "<<(0+contador)<<" "<<(3+contador)<<" "<<(2+contador)<<" "<<(1 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
+                    arquivo<<4<<" "<<(4+contador)<<" "<<(5+contador)<<" "<<(6+contador)<<" "<<(7 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
+                    arquivo<<4<<" "<<(0+contador)<<" "<<(1+contador)<<" "<<(5+contador)<<" "<<(4 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
+                    arquivo<<4<<" "<<(0+contador)<<" "<<(4+contador)<<" "<<(7+contador)<<" "<<(3 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
+                    arquivo<<4<<" "<<(3+contador)<<" "<<(7+contador)<<" "<<(6+contador)<<" "<<(2 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
+                    arquivo<<4<<" "<<(1+contador)<<" "<<(2+contador)<<" "<<(6+contador)<<" "<<(5 + contador)<<" "<<v[i][j][k].r<<" "<<v[i][j][k].g<<" "<<v[i][j][k].b<<" "<<v[i][j][k].a<<std::endl;
                     contador = contador + 8;
 
                 }
