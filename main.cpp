@@ -3,22 +3,55 @@
 #include "sculptor.h"
 
 int main(){
-    Sculptor cubo(100, 100, 100);
+    Sculptor teste(100, 100, 100);
 
-    cubo.setColor(1, 0, 0, 1);
-    cubo.putBox(40, 60, 40, 60, 30, 70);
-    cubo.cutBox(41, 59, 41, 60, 30, 70);
-    cubo.setColor(0, 0, 1, 1);
-    cubo.putSphere(50, 50, 50, 8);
-    cubo.cutSphere(50, 50, 50, 7);
-    /*cubo.setColor(1, 0, 0, 1);
-    cubo.putEllipsoid(30, 30, 30, 30, 45, 45);
-    cubo.putEllipsoid(30, 30, 30, 29, 44, 44);
-    cubo.setColor(0, 0, 1, 1);
-    cubo.putSphere(50, 50, 50, 30);
-    cubo.cutSphere(50, 50, 50, 29);
-    */
-    cubo.writeOFF("ellipsoid.off");
+    //DEFININDO VOXEL´S SIMPLES
+    teste.setColor(1, 0, 0, 1);
+    teste.putVoxel(50, 50, 50);
+
+    teste.setColor(0, 1, 0, 1);
+    teste.putVoxel(51, 50, 50);
+
+    teste.setColor(0, 0, 1, 1);
+    teste.putVoxel(49, 50, 50);
+
+    teste.setColor(1, 1, 0, 1);
+    teste.putVoxel(52, 50, 50);
+
+    teste.setColor(0, 1, 1, 1);
+    teste.putVoxel(48, 50, 50);
+
+    teste.setColor(1, 0, 1, 1);
+    teste.putVoxel(53, 50, 50);
+
+    teste.setColor(1, 1, 1, 1);
+    teste.putVoxel(47, 50, 50);
+
+    teste.setColor(0, 0, 0, 1);
+    teste.putVoxel(50, 51, 50);
+
+    //DEFININDO UMA ESFERA BÁSICA
+    teste.setColor(1, 0, 0, 1);
+    teste.putSphere(50, 85, 50, 29);
+
+    //DEFININDO UM CORTE NA ESFERA CRIADA
+    teste.cutSphere(50, 75, 50, 19);
+
+
+
+    /*teste.putVoxel();
+    teste.cutVoxel();
+
+    teste.putBox();
+    teste.cutBox();
+
+    teste.putSphere();
+    teste.cutSphere();
+
+    teste.putEllipsoid();
+    teste.putEllipsoid();*/
+
+    teste.writeOFF("ellipsoid.off");
 
     return 0;
 }
